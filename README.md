@@ -1,60 +1,112 @@
-# 🎤 API Conference AI Agent
+# 🎤 RTAC - "répondrai toujours avec certitude"
 
-A comprehensive AI assistant for the API Conference Lagos 2025 community, built with Google ADK and FastAPI. This agent helps conference attendees with navigation, speaker information, schedule management, and general support for the event taking place on July 18th & 19th, 2025 at The Zone in Gbagada, Lagos.
+**RTAC** (French for "will always respond with certainty") is a play on words responding to RSVP - a plug-and-play AI assistant platform for event organizers. Bring your event details, and RTAC spins up a custom AI chat that answers questions about your event.
 
-## 🌟 Features
+## 🌟 What is RTAC?
 
-### 🤖 AI Assistant - Ndu
-- **Personal AI Guide**: Meet Ndu (short for Ndumodu, meaning "guide" in Igbo), your expressive Nigerian AI assistant
-- **Nigerian Flair**: Speaks with local slang and cultural context while remaining professional
-- **Smart Conversations**: Powered by Google ADK with Gemini 2.5 Flash model
-- **Session Management**: Maintains conversation context across interactions
+RTAC is a comprehensive AI assistant platform that transforms any event into an intelligent, conversational experience. Whether you're organizing a conference, workshop, meetup, or any gathering, RTAC provides:
 
-### 🚌 Navigation & Transportation
-- **Route Planning**: Get directions to the conference venue using Google Maps
-- **Transportation Options**: Find nearby bus stops, train stations, and transport options
-- **Venue Access**: Information about parking, accessibility, and venue facilities
-- **Real-time Updates**: Traffic and transport information
+- **🤖 Custom AI Assistant**: Personalized AI that knows your event inside and out
+- **📅 Event Management**: Schedule, speakers, sessions, and venue information
+- **🧭 Navigation & Logistics**: Directions, transportation, and venue details
+- **💬 Interactive Support**: Real-time answers to attendee questions
+- **🌐 Web Integration**: Dynamic data fetching from your event website
+- **📱 Modern UI**: Beautiful, responsive chat interface
 
-### 🎤 Speaker Information
-- **Speaker Profiles**: Detailed information about conference speakers
-- **Session Details**: Find sessions by speaker, topic, or time
-- **Expertise Search**: Search speakers by their areas of expertise
-- **Speaker Sessions**: Get all sessions for a specific speaker
+## 🚀 Quick Start
 
-### 📅 Schedule Management
-- **Full Schedule**: Complete conference schedule with session details
-- **Day-by-Day View**: Filter sessions by specific days
-- **Session Search**: Find sessions by title, topic, or speaker
-- **Personalized Recommendations**: Get schedule recommendations based on interests and experience level
+### Prerequisites
 
-### 🌐 Web Scraping
-- **Real-time Data**: Fetch latest information from apiconf.net
-- **Dynamic Updates**: Get current speaker information and schedule changes
-- **Content Extraction**: Parse and format web content for easy consumption
+- Python 3.13 or higher
+- Node.js 18+ (for frontend)
+- Poetry (for Python dependency management)
+- Docker & Docker Compose (recommended)
+- Google API Key (for Google ADK and Maps)
 
-### 💬 General Support
-- **FAQ Support**: Answer common conference questions
-- **Venue Information**: Details about facilities and services
-- **Registration Help**: Assistance with registration and ticketing
-- **Emergency Contacts**: Quick access to support information
+### Option 1: Docker (Recommended)
 
-### 🔄 Fallback Support
-- **Human Contact**: Always provides support phone number when AI can't help
-- **Graceful Degradation**: Handles errors gracefully with helpful fallback options
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd RTAC
+   ```
+
+2. **Set up environment variables**
+   ```bash
+   cp env.example .env
+   # Edit .env with your API keys and event configuration
+   ```
+
+3. **Add your event data**
+   ```bash
+   # Place your event CSV files in the data/ directory
+   # Update speakers.json with your speaker information
+   ```
+
+4. **Build and run with Docker**
+   ```bash
+   docker-compose up --build
+   ```
+
+5. **Access your event AI assistant**
+   - **Frontend**: http://localhost
+   - **API Docs**: http://localhost/docs
+   - **Health Check**: http://localhost/api/v1/agents/health
+
+### Option 2: Local Development
+
+1. **Clone and set up backend**
+   ```bash
+   git clone <repository-url>
+   cd RTAC
+   cp env.example .env
+   poetry install
+   ```
+
+2. **Set up frontend**
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+3. **Configure your event**
+   ```bash
+   # In your .env file:
+   GOOGLE_API_KEY=your_google_api_key_here
+   GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+   CONFERENCE_VENUE_NAME=Your Event Venue
+   CONFERENCE_VENUE_ADDRESS=Your Venue Address
+   CONFERENCE_VENUE_COORDINATES=lat,lng
+   CONFERENCE_DATES=Your Event Dates
+   SUPPORT_PHONE=Your Support Phone
+   SUPPORT_EMAIL=Your Support Email
+   ```
+
+4. **Run the applications**
+   ```bash
+   # Terminal 1 - Backend
+   poetry run python main.py
+   
+   # Terminal 2 - Frontend
+   cd frontend
+   npm run dev
+   ```
 
 ## 🏗️ Architecture
 
 ```
-apiconf-agent/
+RTAC/
 ├── app/
 │   ├── agents/
-│   │   ├── apiconf_agent.py          # Main agent implementation (Ndu)
+│   │   ├── apiconf_agent.py          # Main AI agent implementation
 │   │   └── tools/
 │   │       ├── navigation_tools.py   # Maps, directions, transportation
 │   │       ├── speaker_tools.py      # Speaker information
 │   │       ├── schedule_tools.py     # Event scheduling
-│   │       └── web_scraping_tools.py # Data extraction from apiconf.net
+│   │       ├── organizer_tools.py    # Event organization
+│   │       ├── calendar_tools.py     # Calendar integration
+│   │       ├── csv_schedule_tools.py # CSV data processing
+│   │       └── web_scraping_tools.py # Data extraction from websites
 │   ├── config/
 │   │   ├── settings.py               # Environment configuration
 │   │   └── logger.py                 # Logging setup
@@ -62,7 +114,14 @@ apiconf-agent/
 │   │   ├── base.py                   # Base response schemas
 │   │   └── agents.py                 # Agent request/response models
 │   ├── services/
-│   │   └── web_scraping_service.py   # Web scraping functionality
+│   │   ├── agent_config.py          # Agent configuration
+│   │   ├── agent_factory.py         # Agent creation
+│   │   ├── message_processor.py     # Message handling
+│   │   ├── response_formatter.py    # Response formatting
+│   │   ├── response_processor.py    # Response processing
+│   │   ├── session_manager.py       # Session management
+│   │   ├── tool_manager.py          # Tool management
+│   │   └── web_scraping_service.py  # Web scraping functionality
 │   └── api/
 │       └── v1/
 │           └── agents_router.py      # FastAPI endpoints
@@ -78,13 +137,15 @@ apiconf-agent/
 │   └── vite.config.ts                # Vite configuration
 ├── data/
 │   ├── speakers.json                 # Speaker information
-│   └── schedule.json                 # Event schedule
+│   └── *.csv                        # Event schedule and data
 ├── docker/
-│   ├── backend/
-│   │   └── Dockerfile                # Backend container
+│   ├── Dockerfile                    # Backend container
 │   └── nginx/
 │       ├── Dockerfile                # Nginx container
 │       └── nginx.conf                # Nginx configuration
+├── scripts/
+│   ├── update_csv_data.py           # Data update automation
+│   └── run_csv_update.sh            # Update script runner
 ├── pyproject.toml                    # Python dependencies
 ├── docker-compose.yml                # Container orchestration
 ├── env.example                       # Environment variables template
@@ -92,82 +153,11 @@ apiconf-agent/
 └── README.md                         # This file
 ```
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.13 or higher
-- Node.js 18+ (for frontend)
-- Poetry (for Python dependency management)
-- Docker & Docker Compose (recommended)
-- Google API Key (for Google ADK and Maps)
-
-### Option 1: Docker (Recommended)
-
-This is the easiest way to get started:
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd apiconf-agent
-   ```
-
-2. **Set up environment variables**
-   ```bash
-   cp env.example .env
-   # Edit .env with your API keys and configuration
-   ```
-
-3. **Build and run with Docker**
-   ```bash
-   docker-compose up --build
-   ```
-
-4. **Access the application**
-   - **Frontend**: http://localhost
-   - **API Docs**: http://localhost/docs
-   - **Health Check**: http://localhost/api/v1/agents/health
-
-### Option 2: Local Development
-
-1. **Clone and set up backend**
-   ```bash
-   git clone <repository-url>
-   cd apiconf-agent
-   cp env.example .env
-   poetry install
-   ```
-
-2. **Set up frontend**
-   ```bash
-   cd frontend
-   npm install
-   ```
-
-3. **Configure your API keys**
-   ```bash
-   # In your .env file:
-   GOOGLE_API_KEY=your_google_api_key_here
-   GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
-   DATABASE_URL=postgresql://user:password@localhost/apiconf_agent
-   SECRET_KEY=your-secret-key-here
-   ```
-
-4. **Run the applications**
-   ```bash
-   # Terminal 1 - Backend
-   poetry run python main.py
-   
-   # Terminal 2 - Frontend
-   cd frontend
-   npm run dev
-   ```
-
 ## 📚 API Documentation
 
 ### Endpoints
 
-#### Chat with Ndu (AI Agent)
+#### Chat with Event AI Assistant
 ```http
 POST /api/v1/agents/chat
 ```
@@ -175,7 +165,7 @@ POST /api/v1/agents/chat
 **Request Body:**
 ```json
 {
-  "message": "How do I get to The Zone from Ikeja?",
+  "message": "What sessions are happening today?",
   "user_id": "user123",
   "session_id": "session456"
 }
@@ -185,7 +175,7 @@ POST /api/v1/agents/chat
 ```json
 {
   "success": true,
-  "response": "Omo, that's a good question! To get to The Zone from Ikeja...",
+  "response": "Here are today's sessions...",
   "user_id": "user123",
   "session_id": "session456",
   "confidence": 0.9,
@@ -220,7 +210,7 @@ Once the server is running, visit:
 
 The project follows a modular architecture:
 
-- **`app/agents/`**: AI agent implementation (Ndu) and tools
+- **`app/agents/`**: AI agent implementation and tools
 - **`app/config/`**: Configuration and settings management
 - **`app/schemas/`**: Pydantic models for API requests/responses
 - **`app/api/`**: FastAPI routes and endpoints
@@ -267,10 +257,10 @@ def get_my_tools() -> List[FunctionTool]:
 | `GOOGLE_MAPS_API_KEY` | Google Maps API key | Yes | - |
 | `DATABASE_URL` | PostgreSQL database URL | Yes | - |
 | `REDIS_URL` | Redis connection URL | No | redis://localhost:6379/0 |
-| `CONFERENCE_VENUE_NAME` | Conference venue name | Yes | - |
+| `CONFERENCE_VENUE_NAME` | Event venue name | Yes | - |
 | `CONFERENCE_VENUE_ADDRESS` | Venue address | Yes | - |
 | `CONFERENCE_VENUE_COORDINATES` | Venue coordinates (lat,lng) | Yes | - |
-| `CONFERENCE_DATES` | Conference dates | Yes | - |
+| `CONFERENCE_DATES` | Event dates | Yes | - |
 | `SUPPORT_PHONE` | Support phone number | Yes | - |
 | `SUPPORT_EMAIL` | Support email | Yes | - |
 | `SECRET_KEY` | Application secret key | Yes | - |
@@ -339,18 +329,12 @@ The application includes comprehensive logging and monitoring:
 ### CORS Configuration
 Configure allowed origins in your `.env` file:
 ```bash
-CORS_ORIGINS=["http://localhost:3000", "https://apiconf.net"]
+CORS_ORIGINS=["http://localhost:3000", "https://yourdomain.com"]
 ```
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes following Google ADK conventions
-4. Add tests for new functionality
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Submit a pull request
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started.
 
 ### Code Style
 
@@ -368,21 +352,23 @@ For support and questions:
 - **Phone**: Check your `.env` file for the support phone number
 - **Email**: Check your `.env` file for the support email
 - **Documentation**: Visit `/docs` when the server is running
-- **AI Assistant**: Chat with Ndu directly through the application
+- **AI Assistant**: Chat with your event AI directly through the application
 
 ## 🎯 Roadmap
 
-- [ ] Real-time session updates via WebSockets
-- [ ] Integration with conference registration system
-- [ ] Multi-language support (Yoruba, Hausa, Igbo)
+- [ ] No-code event configuration interface
+- [ ] Drag-and-drop tool builder
+- [ ] Multi-language support
 - [ ] Mobile app integration
 - [ ] Advanced analytics and insights
 - [ ] Integration with social media platforms
-- [ ] Voice interface for Ndu
+- [ ] Voice interface
 - [ ] Offline mode for basic functionality
+- [ ] Event template marketplace
+- [ ] Real-time collaboration features
 
 ---
 
-**Built with ❤️ for the API Conference community in Nigeria**
+**Built with ❤️ for event organizers worldwide**
 
-*Meet Ndu - Your AI guide for API Conference Lagos 2025! 🎤✨* 
+*RTAC - Making every event intelligent and interactive! 🎤✨* 
