@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Sidebar.module.css';
 import { FiPlus, FiX } from 'react-icons/fi';
+import Themetogglebutton from './context/Themetogglebutton';
 
 interface HistoryItem {
   sessionId: string;
@@ -35,11 +36,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onNewChat, onRestore
         aria-modal="true"
         aria-label="Sidebar navigation"
       >
+        <Themetogglebutton/>
         <div className={styles.logo}>
           <img src="https://apiconf.net/logo2025.svg" alt="APIConf Logo" />
           <button className={styles.closeButton} onClick={onClose}>
             <FiX />
           </button>
+
         </div>
 
         <button className={styles.newChatButton} onClick={onNewChat}>
