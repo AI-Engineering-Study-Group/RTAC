@@ -81,7 +81,7 @@ class RateLimitTester:
             self.print_rate_limit_info(response)
             
             if response["status"] == 429:
-                print("🚫 Rate limit exceeded!")
+                print("Rate limit exceeded!")
                 break
             
             # Small delay between requests
@@ -109,7 +109,7 @@ class RateLimitTester:
             self.print_rate_limit_info(response)
             
             if response["status"] == 429:
-                print("🚫 Rate limit exceeded!")
+                print("Rate limit exceeded!")
                 retry_after = response["headers"].get("retry-after")
                 if retry_after:
                     print(f"Retry after: {retry_after} seconds")
@@ -142,9 +142,9 @@ class RateLimitTester:
             )
             
             if has_rate_limit:
-                print("⚠️  Rate limit headers found (unexpected)")
+                print("Rate limit headers found (unexpected)")
             else:
-                print("✅ No rate limit headers (expected)")
+                print("No rate limit headers (expected)")
             
             print("-" * 30)
     
@@ -202,7 +202,7 @@ class RateLimitTester:
 
 async def main():
     """Run all rate limiting tests."""
-    print("🧪 RTAC API Rate Limiting Test Suite")
+    print("RTAC API Rate Limiting Test Suite")
     print("=" * 60)
     
     async with RateLimitTester() as tester:
@@ -227,10 +227,10 @@ async def main():
             await tester.test_chat_rate_limits(5)
             
         except Exception as e:
-            print(f"❌ Test failed with error: {e}")
+            print(f"Test failed with error: {e}")
             return
     
-    print("✅ Rate limiting tests completed!")
+    print("Rate limiting tests completed!")
 
 
 if __name__ == "__main__":
