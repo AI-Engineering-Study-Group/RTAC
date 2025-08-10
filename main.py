@@ -12,6 +12,7 @@ import uvicorn
 from app.config.logger import Logger
 from app.config.settings import settings
 from app.api.v1.agents_router import router as agents_router
+from app.middleware.rate_limit import RateLimitMiddleware
 
 # Setup logging
 Logger.setup_root_logger()
@@ -52,6 +53,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add rate limiting middleware (if enabled)
+if settings.rate_limit_enabled:
+    app.add_middleware(RateLimitMiddleware)
 
 # Include routers
 app.include_router(agents_router, prefix="/api/v1/agents", tags=["agents"])

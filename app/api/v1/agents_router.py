@@ -19,6 +19,21 @@ logger = Logger.get_logger(__name__)
 # Track agent startup time
 startup_time = time.time()
 
+
+@router.exception_handler(429)
+async def rate_limit_handler(request: Request, exc: HTTPException):
+    """Handle rate limit exceeded errors."""
+    return JSONResponse(
+        status_code=429,
+        content={
+            "success": False,
+            "error": "Rate limit exceeded",
+            "message": "Too many requests. Please try again later.",
+            "support_contact": settings.support_phone
+        },
+        headers=getattr(exc, "headers", {})
+    )
+
 @router.post(
     "/chat",
     response_model=SuccessResponseSchema[AgentResponse],
@@ -186,4 +201,48 @@ async def get_conference_info():
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to get conference information"
+        )
+
+
+@router.get(
+    "/rate-limits",
+    response_model=SuccessResponseSchema[dict],
+    status_code=status.HTTP_200_OK,
+    summary="Get rate limit information",
+    description="Get current rate limiting configuration and status"
+)
+async def get_rate_limits():
+    """Get rate limiting information."""
+    try:
+        rate_limit_info = {
+            "enabled": settings.rate_limit_enabled,
+            "global_limits": {
+                "requests": settings.rate_limit_requests,
+                "window_seconds": settings.rate_limit_window,
+                "window_description": f"{settings.rate_limit_window // 60} minutes"
+            },
+            "chat_limits": {
+                "requests": settings.rate_limit_chat_requests,
+                "window_seconds": settings.rate_limit_chat_window,
+                "window_description": f"{settings.rate_limit_chat_window // 60} minutes"
+            },
+            "headers_included": [
+                "X-RateLimit-Limit",
+                "X-RateLimit-Remaining", 
+                "X-RateLimit-Reset",
+                "X-RateLimit-Window",
+                "Retry-After (when limit exceeded)"
+            ]
+        }
+        
+        return SuccessResponseSchema(
+            data=rate_limit_info,
+            message="Rate limit information retrieved successfully"
+        )
+        
+    except Exception as e:
+        logger.error(f"Error getting rate limit info: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to get rate limit information"
         ) 

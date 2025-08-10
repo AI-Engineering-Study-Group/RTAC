@@ -50,6 +50,13 @@ class Settings(BaseSettings):
     secret_key: str = Field(..., env="SECRET_KEY")
     access_token_expire_minutes: int = Field(30, env="ACCESS_TOKEN_EXPIRE_MINUTES")
     
+    # Rate Limiting Configuration
+    rate_limit_requests: int = Field(100, env="RATE_LIMIT_REQUESTS")
+    rate_limit_window: int = Field(3600, env="RATE_LIMIT_WINDOW")  # 1 hour in seconds
+    rate_limit_chat_requests: int = Field(30, env="RATE_LIMIT_CHAT_REQUESTS")
+    rate_limit_chat_window: int = Field(300, env="RATE_LIMIT_CHAT_WINDOW")  # 5 minutes in seconds
+    rate_limit_enabled: bool = Field(True, env="RATE_LIMIT_ENABLED")
+    
     @field_validator("cors_origins", mode="before")
     @classmethod
     def parse_cors_origins(cls, v):
