@@ -2,6 +2,7 @@ import Chat from './components/Chat';
 import Sidebar from './components/Sidebar';
 import styles from './App.module.css';
 import { useState } from 'react';
+import { ThemeProvider } from './components/context/ThemeContext';
 
 const saveSessionToHistory = () => {
   const history = JSON.parse(localStorage.getItem('apiconf_chat_history') || '[]');
@@ -52,6 +53,7 @@ const App: React.FC = () => {
   };
 
   return (
+    <ThemeProvider>
     <div className={styles.app}>
       <Sidebar
         isOpen={sidebarOpen}
@@ -65,6 +67,7 @@ const App: React.FC = () => {
         {view === 'settings' && <SettingsComponent />}
       </main>
     </div>
+    </ThemeProvider>
   );
 };
 
