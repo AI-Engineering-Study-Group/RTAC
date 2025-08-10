@@ -1,10 +1,18 @@
 .sidebar {
   width: 260px;
-  background-color: #f7f9fc;
+  
   padding: 24px;
   display: flex;
   flex-direction: column;
   border-right: 1px solid #eaf0f6;
+
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  
+  border-right: 1px solid var(--accent-color);
+  transition: background-color 0.3s, color 0.3s;
+
+
 }
 
 .logo {
