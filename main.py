@@ -12,6 +12,7 @@ import uvicorn
 from app.config.logger import Logger
 from app.config.settings import settings
 from app.api.v1.agents_router import router as agents_router
+from app.services.cache import init_cache
 
 # Setup logging
 Logger.setup_root_logger()
@@ -28,6 +29,11 @@ async def lifespan(app: FastAPI):
     logger.info(f"Environment: {settings.environment}")
     logger.info(f"Model: {settings.google_model_name}")
     logger.info(f"Venue: {settings.conference_venue_name}")
+
+    # Initialize Redis
+    logger.info("Connecting to Redis...")
+    init_cache()
+    logger.info("Redis connected.")
     
     yield
     
